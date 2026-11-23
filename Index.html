@@ -1,35 +1,47 @@
-<!{
-    res.style.display='block';
-    res.innerHTML = "🏆 TE TOCÓ:<br>"+ya;
-    btn.disabled = true;
-    btn.innerText = "YA JUGASTE";
-    msg.innerHTML = "Ya usaste tu oportunidad en este celular.";
-  }
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruleta Liguilla MX</title>
+<style>
+body{font-family:Arial,sans-serif;text-align:center;background:#0f172a;color:white;padding:20px}
+.card{background:white;color:#111;border-radius:20px;padding:25px;max-width:400px;margin:auto}
+h1{color:#dc2626}
+.equipo{font-size:42px;font-weight:bold;margin:20px 0}
+button{background:#dc2626;color:white;border:none;padding:15px 30px;font-size:18px;border-radius:12px}
+</style>
+</head>
+<body>
+<h1>🏆 RULETA LIGUILLA MX</h1>
+<p>8 equipos - 8 personas - 1 oportunidad</p>
+<div class="card">
+<h2 id="saludo">Hola</h2>
+<div class="equipo" id="equipo">❓</div>
+<p id="mensaje">Presiona GIRAR para revelar tu equipo</p>
+<button onclick="girar()">🎡 GIRAR</button>
+</div>
+<script>
+const equipos = {
+1:"Toluca",
+2:"América",
+3:"Cruz Azul",
+4:"Tigres UANL",
+5:"Monterrey",
+6:"Chivas",
+7:"Pachuca",
+8:"León"
+};
+const params = new URLSearchParams(window.location.search);
+const jugador = params.get('jugador') || "1";
+document.getElementById('saludo').innerText = "Hola, Jugador " + jugador;
+let yaGiro = false;
 function girar(){
-  if(!jugador || !sorteo[jugador]) return;
-  let clave = "jugado_jugador_"+jugador;
-  if(localStorage.getItem(clave)){
-    alert("Ya jugaste, no puedes girar otra vez");
-    return;
-  }
-  btn.disabled = true;
-  btn.innerText = "GIRANDO...";
-  let equipos = ["Chivas","Pachuca","Cruz Azul","León","Monterrey","Toluca","América","Atlas"];
-  let i=0;
-  let intervalo = setInterval(()=>{
-    res.style.display='block';
-    res.innerHTML = equipos[i % equipos.length];
-    i++;
-    if(i>25){
-      clearInterval(intervalo);
-      let final = sorteo[jugador];
-      res.innerHTML = "🏆 TE TOCÓ:<br>"+final;
-      localStorage.setItem(clave, final);
-      btn.innerText = "YA JUGASTE";
-      msg.innerHTML = "Tómale captura y mándala. Ya no puedes girar otra vez.";
-    }
-  },100);
+if(yaGiro) return;
+yaGiro = true;
+const equipo = equipos[jugador] || "León";
+document.getElementById('equipo').innerText = "🎉 " + equipo;
+document.getElementById('mensaje').innerText = "¡Este es tu equipo para la Liguilla! No se puede cambiar.";
 }
 </script>
 </body>
