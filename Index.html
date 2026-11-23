@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ruleta Liguilla - Tu Equipo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0b1220;color:#fff;padding:20px;text-align:center}
+.card{background:#131e33;border:1px solid #263554;border-radius:20px;padding:20px;margin:20px auto;max-width:420px}
+h1{margin:6px 0} p{color:#9fb3d1}
+.btn{width:100%;padding:16px;border:0;border-radius:14px;background:#ffd166;font-weight:900;font-size:19px;margin-top:12px}
+.btn:disabled{background:#555;color:#aaa}
+.equipo{font-size:34px;font-weight:900;color:#4ade80;margin:18px 0;display:none}
+.bloqueado{font-size:18px;font-weight:900;color:#ff6b6b;margin:16px 0}
+.small{font-size:12px;color:#9fb3d1}
+.lista{text-align:left;background:#0f1830;border-radius:12px;padding:12px;margin-top:12px;font-size:14px}
+</style>
+</head>
+<body>
+<h1>🏆 RULETA LIGUILLA MX</h1>
+<p>8 equipos - 8 personas - 1 oportunidad</p>
+<div class="card">
+<div id="info"></div>
+<div id="resultado" class="equipo"></div>
+<button id="btnGirar" class="btn" onclick="girar()">🎡 GIRAR MI RULETA</button>
+<div id="msg" class="small" style="margin-top:10px"></div>
+<div class="lista">Equipos en el sorteo:<br>• Chivas • Pachuca • Cruz Azul • León<br>• Monterrey • Toluca • América • Atlas</div>
+</div>
+<p class="small">Cada enlace es personal. Si lo vuelves a abrir en este celular, ya no te dejará girar otra vez.</p>
+<script>
+// SORTEO YA HECHO - NO SE REPITE
+const sorteo = {
+  "1": "Toluca",
+  "2": "Chivas",
+  "3": "América",
+  "4": "León",
+  "5": "Atlas",
+  "6": "Pachuca",
+  "7": "Monterrey",
+  "8": "Cruz Azul"
+};
+const params = new URLSearchParams(window.location.search);
+const jugador = params.get('jugador');
+const info = document.getElementById('info');
+const btn = document.getElementById('btnGirar');
+const res = document.getElementById('resultado');
+const msg = document.getElementById('msg');
+
+if(!jugador || !sorteo[jugador]){
+  info.innerHTML = "<h2>⚠️ Enlace incorrecto</h2><p>Pídele a quien te lo mandó tu enlace personal. Debe decir ?jugador=1 hasta ?jugador=8</p>";
+  btn.style.display='none';
+} else {
+  info.innerHTML = "<h2>Hola, Jugador "+jugador+"</h2><p>Te toca 1 sola girada. No se puede repetir.</p>";
+  let clave = "jugado_jugador_"+jugador;
+  let ya = localStorage.getItem(clave);
+  if(ya){
+    res.style.display='block';
+    res.innerHTML = "🏆 TE TOCÓ:<br>"+ya;
+    btn.disabled = true;
+    btn.innerText = "YA JUGASTE";
+    msg.innerHTML = "Ya usaste tu oportunidad en este celular.";
+  }
+}
+function girar(){
+  if(!jugador || !sorteo[jugador]) return;
+  let clave = "jugado_jugador_"+jugador;
+  if(localStorage.getItem(clave)){
+    alert("Ya jugaste, no puedes girar otra vez");
+    return;
+  }
+  btn.disabled = true;
+  btn.innerText = "GIRANDO...";
+  let equipos = ["Chivas","Pachuca","Cruz Azul","León","Monterrey","Toluca","América","Atlas"];
+  let i=0;
+  let intervalo = setInterval(()=>{
+    res.style.display='block';
+    res.innerHTML = equipos[i % equipos.length];
+    i++;
+    if(i>25){
+      clearInterval(intervalo);
+      let final = sorteo[jugador];
+      res.innerHTML = "🏆 TE TOCÓ:<br>"+final;
+      localStorage.setItem(clave, final);
+      btn.innerText = "YA JUGASTE";
+      msg.innerHTML = "Tómale captura y mándala. Ya no puedes girar otra vez.";
+    }
+  },100);
+}
+</script>
+</body>
+</html>
