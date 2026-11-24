@@ -29,8 +29,8 @@ button{background:#dc2626;color:white;border:none;padding:15px 30px;font-size:19
 <p id="mensaje"></p>
 </div>
 <script>
-const equipos=["Toluca","América","Cruz Azul","Tigres UANL","Monterrey","Chivas","Pachuca","León"];
-const asignacion={1:0,2:4,3:1,4:6,5:2,6:7,7:3,8:5};
+const equipos=["Toluca","América","Cruz Azul","Atlas","Monterrey","Chivas","Pachuca","León"];
+const asignacion={1:6,2:0,3:7,4:2,5:5,6:1,7:4,8:3};
 const params=new URLSearchParams(window.location.search);
 const jugador=params.get('jugador')||"1";
 document.getElementById('saludo').innerText="Hola, Jugador "+jugador;
